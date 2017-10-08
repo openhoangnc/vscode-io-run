@@ -1,0 +1,341 @@
+{
+  "name": "io-run",
+  "displayName": "IORun",
+  "description": "Support tool for run and test code in Competitive Programming with C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
+  "version": "1.0.0",
+  "publisher": "hoangnc",
+  "icon": "images/logo.png",
+  "engines": {
+    "vscode": "^1.6.0"
+  },
+  "categories": [
+    "Languages",
+    "Other"
+  ],
+  "keywords": [
+    "run",
+    "c++",
+    "java",
+    "python",
+    "pascal"
+  ],
+  "bugs": {
+    "url": "https://github.com/openhoangnc/vscode-io-run/issues",
+    "email": "hoangnc.jp@gmail.com"
+  },
+  "homepage": "https://github.com/openhoangnc/vscode-io-run/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openhoangnc/vscode-io-run.git"
+  },
+  "activationEvents": [
+    "onCommand:io-run.run",
+    "onCommand:io-run.run-1-input",
+    "onCommand:io-run.add-input-output"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "io-run.run",
+        "title": "IORun Run",
+        "icon": "./images/run.png"
+      },
+      {
+        "command": "io-run.run-1-input",
+        "title": "IORun Run with this input only"
+      },
+      {
+        "command": "io-run.stop",
+        "title": "IORun Stop"
+      },
+      {
+        "command": "io-run.add-input-output",
+        "title": "IORun Add IO"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "io-run.run",
+        "key": "ctrl+enter"
+      },
+      {
+        "command": "io-run.run-1-input",
+        "key": "ctrl+1"
+      },
+      {
+        "command": "io-run.add-input-output",
+        "key": "alt+ctrl+a"
+      },
+      {
+        "command": "io-run.stop",
+        "key": "shift+enter"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "!inOutput",
+          "command": "io-run.add-input-output",
+          "group": "navigation"
+        },
+        {
+          "when": "!inOutput",
+          "command": "io-run.run",
+          "group": "navigation"
+        },
+        {
+          "when": "!inOutput",
+          "command": "io-run.run-1-input",
+          "group": "navigation"
+        },
+        {
+          "when": "inOutput",
+          "command": "io-run.stop",
+          "group": "stop-code-run"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "config.io-run.showRunIconInEditorTitleMenu",
+          "command": "io-run.run",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "IO Run configuration",
+      "properties": {
+        "io-run.executorMap.common": {
+          "type": "object",
+          "description": "Set the common executor of each language.",
+          "default": {
+            ".c": {
+              "compileCmd": "gcc -g -std=gnu11 -lm -Wfatal-errors ${codeFile} -o ${codeFileNoExt}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}",
+              "errorTracer": "gdb"
+            },
+            ".cpp": {
+              "compileCmd": "g++ -g -O2 -std=gnu++11 -Wfatal-errors ${codeFile} -o ${codeFileNoExt}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}",
+              "errorTracer": "gdb"
+            },
+            ".d": {
+              "compileCmd": "dmd -g ${codeFile}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt} && rm ${codeFileNoExt.o}",
+              "errorTracer": "gdb"
+            },
+            ".go": {
+              "compileCmd": "go build -o ${codeFileNoExt} ${codeFile}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}"
+            },
+            ".hs": {
+              "compileCmd": "ghc -o ${codeFileNoExt} ${codeFile}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}"
+            },
+            ".java": {
+              "compileCmd": "javac -encoding UTF-8 ${codeFile}",
+              "runCmd": "java ${codeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt.class}"
+            },
+            ".js": {
+              "runCmd": "node ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".lua": {
+              "runCmd": "lua ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".pas": {
+              "compileCmd": "fpc -g ${codeFile} -o ${codeFileNoExt}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}",
+              "errorTracer": "gdb"
+            },
+            ".py": {
+              "runCmd": "python ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".php": {
+              "runCmd": "php ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".pl": {
+              "runCmd": "perl ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".r": {
+              "runCmd": "Rscript ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".rb": {
+              "runCmd": "ruby ${codeFile} <${inputFile} >${outputFile}"
+            },
+            ".rs": {
+              "PATH": "~/.cargo/bin",
+              "compileCmd": "rustc -g -o ${codeFileNoExt} ${codeFile}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}"
+            },
+            ".scala": {
+              "PATH": "~/scala/bin",
+              "compileCmd": "scalac ${codeFile}",
+              "runCmd": "scala ${codeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt.class} ${codeFileNoExt$.class}"
+            },
+            ".groovy": {
+              "PATH": "~/groovy/bin",
+              "compileCmd": "groovyc ${codeFile}",
+              "runCmd": "groovy ${codeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt.class}"
+            },
+            ".swift": {
+              "runCmd": "swift ${codeFile} <${inputFile} >${outputFile}"
+            }
+          }
+        },
+        "io-run.executorMap.darwin": {
+          "type": "object",
+          "description": "Set the executor of each language for MacOS.",
+          "default": {
+            ".c": {
+              "cleanupCmd": "rm ${codeFileNoExt} && rm -rf ${codeFileNoExt.dSYM}",
+              "errorTracer": "lldb"
+            },
+            ".cpp": {
+              "cleanupCmd": "rm ${codeFileNoExt} && rm -rf ${codeFileNoExt.dSYM}",
+              "errorTracer": "lldb"
+            },
+            ".pas": {
+              "cleanupCmd": "rm ${codeFileNoExt} && rm -rf ${codeFileNoExt.dSYM}",
+              "errorTracer": "lldb"
+            },
+            ".rs": {
+              "cleanupCmd": "rm ${codeFileNoExt} && rm -rf ${codeFileNoExt.dSYM}",
+              "errorTracer": "lldb"
+            }
+          }
+        },
+        "io-run.executorMap.win32": {
+          "type": "object",
+          "description": "Set the executor of each language for Windows.",
+          "default": {
+            ".c": {
+              "PATH": "C:\\MinGW\\bin;C:\\msys64\\mingw64\\bin;C:\\Program Files (x86)\\CodeBlocks\\MinGW\\bin;C:\\Program Files\\CodeBlocks\\MinGW\\bin;C:\\cygwin\\bin;C:\\TDM-GCC-32\\bin;C:\\TDM-GCC-64\\bin",
+              "compileCmd": "gcc -g -static -std=gnu11 -lm -Wfatal-errors ${codeFile} -o ${codeFileNoExt.exe}",
+              "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
+              "cleanupCmd": "del ${codeFileNoExt.exe}"
+            },
+            ".cpp": {
+              "PATH": "C:\\MinGW\\bin;C:\\msys64\\mingw64\\bin;C:\\Program Files (x86)\\CodeBlocks\\MinGW\\bin;C:\\Program Files\\CodeBlocks\\MinGW\\bin;C:\\cygwin\\bin;C:\\TDM-GCC-32\\bin;C:\\TDM-GCC-64\\bin",
+              "compileCmd": "g++ -g -static -std=gnu++11 -Wfatal-errors ${codeFile} -o ${codeFileNoExt.exe}",
+              "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
+              "cleanupCmd": "del ${codeFileNoExt.exe}"
+            },
+            ".go": {
+              "PATH": "C:\\Go\\bin",
+              "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
+              "cleanupCmd": "del ${codeFileNoExt.exe}"
+            },
+            ".java": {
+              "cleanupCmd": "del ${codeFileNoExt.class}"
+            },
+            ".pas": {
+              "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
+              "cleanupCmd": "del ${codeFileNoExt.exe}"
+            },
+            ".rs": {
+              "cleanupCmd": "del ${codeFileNoExt.class}"
+            },
+            ".vbs": {
+              "runCmd": "cscript ${dirCodeFile} <${inputFile} >${outputFile}"
+            },
+            ".ps1": {
+              "runCmd": "Powershell.exe -File ${dirCodeFile} <${inputFile} >${outputFile}"
+            },
+            ".cmd": {
+              "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
+            },
+            ".bat": {
+              "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
+            }
+          }
+        },
+        "io-run.inputExtension": {
+          "type": "string",
+          "default": ".inp",
+          "description": "Define extension for input files."
+        },
+        "io-run.outputExtension": {
+          "type": "string",
+          "default": ".out",
+          "description": "Define extension for output files."
+        },
+        "io-run.acceptExtension": {
+          "type": "string",
+          "default": ".oac",
+          "description": "Define extension for accepting output files."
+        },
+        "io-run.clearPreviousOutput": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to clear previous output before each run."
+        },
+        "io-run.saveFileBeforeRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to save the file before running."
+        },
+        "io-run.cleanupAfterRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to cleanup file after running."
+        },
+        "io-run.deleteOutputFiles": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to delete output files after running."
+        },
+        "io-run.showRunIconInEditorTitleMenu": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show 'Run Code' icon in editor title menu."
+        },
+        "io-run.enableAnalytic": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to send analytics data."
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "io-run-output",
+        "mimetypes": [
+          "text/x-code-output"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "io-run-output",
+        "scopeName": "io-run.output",
+        "path": "./syntaxes/io-run-output.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "dependencies": {
+    "node-machine-id": "^1.1.9",
+    "tree-kill": "^1.1.0",
+    "universal-analytics": "^0.4.15"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.5",
+    "vscode": "^0.11.0"
+  }
+}
