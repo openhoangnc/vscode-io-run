@@ -19,7 +19,7 @@ If you like this extension, you could donate via **[PayPal](https://paypal.me/to
 
 ## Usages
 
-* In the Text Editor, use shortcut `Ctrl+Enter (Cmd+Enter)` or right click the Text Editor and then click `IORun Run` in editor context menu, or click ![RunIcon](images/run-16.png) button in editor title menu, the code will run.
+* In the Text Editor, use shortcut `Ctrl+Enter (Cmd+Enter)` or right click the Text Editor and then click `IORun Run` in editor context menu, or click ![RunIcon](images/run-16.png) button in editor title menu, the code will be run.
   * If there is no input file, the code will be run in TERMINAL.
   * If there are one or more input files, the code will be run with each input files. Input file will be redirect to Standard Input, the Standard Output will be redirect to output file.
 * To stop the running code, use shortcut `Shift+Enter` or right click the Output Channel and then click `IORun Stop` in context menu.

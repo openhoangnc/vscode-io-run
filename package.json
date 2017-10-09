@@ -2,7 +2,7 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for run and test code in Competitive Programming with C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
@@ -331,7 +331,7 @@
   },
   "dependencies": {
     "node-machine-id": "^1.1.9",
-    "tree-kill": "^1.1.0",
+    "tree-kill": "^1.2.0",
     "universal-analytics": "^0.4.15"
   },
   "devDependencies": {
