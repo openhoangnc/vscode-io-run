@@ -6,7 +6,7 @@ Running and testing tool for Competitive Programming, supported languages: **C, 
 
 ## Donation
 
-If you like this extension, you could donate via **[PayPal](paypal.me/tohoangnc)**. Any amount is welcome. It will encourage me to make this extension better and better!
+If you like this extension, you could donate via **[PayPal](https://paypal.me/tohoangnc)**. Any amount is welcome. It will encourage me to make this extension better and better!
 
 ## Features
 
