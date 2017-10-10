@@ -1,3 +1,6 @@
+### 1.0.3
+* Update development dependencies
+
 ### 1.0.2
 * Edit README.md
 
