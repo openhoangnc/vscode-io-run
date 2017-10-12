@@ -1,3 +1,7 @@
+### 1.0.4
+* Edit the executor config of Rust and Scala
+* Add note for C/C++ compiler installation to README.md
+
 ### 1.0.3
 * Update development dependencies
 

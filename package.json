@@ -2,7 +2,7 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
@@ -175,7 +175,8 @@
               "PATH": "~/.cargo/bin",
               "compileCmd": "rustc -g -o ${codeFileNoExt} ${codeFile}",
               "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
-              "cleanupCmd": "rm ${codeFileNoExt}"
+              "cleanupCmd": "rm ${codeFileNoExt}",
+              "errorTracer": "gdb"
             },
             ".scala": {
               "PATH": "~/scala/bin",
@@ -245,7 +246,10 @@
               "cleanupCmd": "del ${codeFileNoExt.exe}"
             },
             ".rs": {
-              "cleanupCmd": "del ${codeFileNoExt.class}"
+              "cleanupCmd": "del ${codeFileNoExt}"
+            },
+            ".scala": {
+              "cleanupCmd": "del ${codeFileNoExt.class} ${codeFileNoExt$.class}"
             },
             ".vbs": {
               "runCmd": "cscript ${dirCodeFile} <${inputFile} >${outputFile}"

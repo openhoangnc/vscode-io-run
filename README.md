@@ -64,6 +64,9 @@ e.g. To set the executor PATH for C++, Java and Python:
 **Please take care of the back slash and the space in file path of the executor**
   * Back slash: please use `\\`
 
+## Note
+  * [Install MinGW](https://github.com/openhoangnc/vscode-io-run/wiki/Install-GNU-C%EF%BC%8B%EF%BC%8B---Compiler-and-config-for-VS-Code-in-Windows) to run C/C++ on Windows 
+
 ## Telemetry data
 By default, telemetry data collection is turned on to understand user behavior to improve this extension. To disable it, update the settings.json as below:
 ```json
