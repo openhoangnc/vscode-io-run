@@ -505,15 +505,17 @@ export class IORunManager {
         let commonMap = this.config.get<any>('executorMap.common');
         let osMap = this.config.get<any>('executorMap.' + os.platform());
 
-        Object.keys(osMap).forEach(function (key) {
-            if (!commonMap[key]) {
-                commonMap[key] = osMap[key];
-            } else {
-                Object.keys(osMap[key]).forEach(function (subkey) {
-                    commonMap[key][subkey] = osMap[key][subkey];
-                });
-            }
-        });
+        if (osMap != null) {
+            Object.keys(osMap).forEach(function (key) {
+                if (!commonMap[key]) {
+                    commonMap[key] = osMap[key];
+                } else {
+                    Object.keys(osMap[key]).forEach(function (subkey) {
+                        commonMap[key][subkey] = osMap[key][subkey];
+                    });
+                }
+            });
+        }
 
         return commonMap;
     }

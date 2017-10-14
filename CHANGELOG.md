@@ -1,3 +1,6 @@
+### 1.0.5
+* Fix bug in activating the extension in Linux
+
 ### 1.0.4
 * Edit the executor config of Rust and Scala
 * Add note for C/C++ compiler installation to README.md
