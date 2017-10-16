@@ -2,7 +2,7 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
@@ -264,6 +264,11 @@
               "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
             }
           }
+        },
+        "io-run.timeLimit": {
+          "type": "number",
+          "default": 0,
+          "description": "The maximum execution time, in seconds. If set to zero, no time limit is imposed."
         },
         "io-run.inputExtension": {
           "type": "string",

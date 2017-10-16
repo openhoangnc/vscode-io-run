@@ -14,12 +14,16 @@ export class IORunManager {
     private codeFile: string;
     private config: vscode.WorkspaceConfiguration;
     private killRequested: boolean;
+    private timeLimitExceeded: boolean;
+    private executeTimer;
+
     private runningCodeFile: string;
 
     constructor(config) {
         this.output = vscode.window.createOutputChannel('IO Run');
         this.terminal = vscode.window.createTerminal('IO Run');
         this.killRequested = false;
+        this.timeLimitExceeded = false;
         this.config = config;
     }
 
@@ -217,83 +221,101 @@ export class IORunManager {
             }
             includePath = executor.codeDir + path.delimiter + includePath;
             let startTime = new Date();
+            if (this.executeTimer != null) {
+                clearTimeout(this.executeTimer);
+                this.executeTimer = null;
+            }
+
+            if (executor.timeLimit > 0) {
+                this.executeTimer = setTimeout(() => {
+                    if (this.process != null) {
+                        this.timeLimitExceeded = true;
+                        let kill = require('tree-kill');
+                        kill(this.process.pid);
+                    }
+                }, executor.timeLimit * 1000);
+            }
+
             this.process = require('child_process').exec(runCmd, { cwd: executor.codeDir, env: { PATH: includePath } }, (err, stdout, stderr) => {
                 if (this.killRequested) {
                     this.output.appendLine('STOPPED');
                     this.killRequested = false;
                     this.cleanup(executor);
                     return;
-                }
+                } else if (this.timeLimitExceeded) {
+                    this.output.appendLine('TLE');
+                    this.timeLimitExceeded = false;
+                } else {
+                    let endTime = new Date();
+                    let elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000;
 
-                let endTime = new Date();
-                let elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000;
+                    this.process = null;
+                    if (err == null && stderr.length == 0) {
+                        this.output.append('done ' + elapsedTime.toFixed(3) + 's');
 
-                this.process = null;
-                if (err == null && stderr.length == 0) {
-                    this.output.append('done ' + elapsedTime.toFixed(3) + 's');
-
-                    let oFile = path.join(executor.codeDir, outputFile);
-                    let aFile = path.join(executor.codeDir, acceptFile);
-                    if (fs.existsSync(oFile)) {
-                        if (fs.statSync(oFile).size == 0) {
-                            this.output.append(' ' + executor.outputExtension + ' empty');
-                            if (executor.cleanupAfterRun) {
-                                fs.unlinkSync(oFile);
-                            }
-                        } else if (fs.existsSync(aFile) && fs.statSync(aFile).size > 0) {
-                            if (this.compareOA(executor, oFile, aFile)) {
-                                this.output.append(' AC');
-                                if (executor.deleteOutputFiles) {
+                        let oFile = path.join(executor.codeDir, outputFile);
+                        let aFile = path.join(executor.codeDir, acceptFile);
+                        if (fs.existsSync(oFile)) {
+                            if (fs.statSync(oFile).size == 0) {
+                                this.output.append(' ' + executor.outputExtension + ' empty');
+                                if (executor.cleanupAfterRun) {
                                     fs.unlinkSync(oFile);
                                 }
-                            } else {
-                                this.output.appendLine(' WA');
-
-                                let showDiff = () => {
-                                    vscode.workspace.openTextDocument(oFile).then(doc => {
-                                        vscode.window.showTextDocument(doc, vscode.ViewColumn.Two).then(editor => {
-                                            let diffTitle = outputFile + '⟷' + acceptFile;
-                                            vscode.commands.executeCommand('vscode.diff',
-                                                vscode.Uri.file(oFile),
-                                                vscode.Uri.file(aFile),
-                                                diffTitle
-                                            );
-                                        });
-                                        let iFile = path.join(executor.codeDir, inputFile);
-                                        vscode.workspace.openTextDocument(iFile).then(doc => {
-                                            vscode.window.showTextDocument(doc, vscode.ViewColumn.One);
-                                        });
-                                        this.cleanup(executor);
-                                    });
-
-                                }
-
-                                if (vscode.window.activeTextEditor.document.fileName == oFile) {
-                                    vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
-                                        showDiff();
-                                    });
+                            } else if (fs.existsSync(aFile) && fs.statSync(aFile).size > 0) {
+                                if (this.compareOA(executor, oFile, aFile)) {
+                                    this.output.append(' AC');
+                                    if (executor.deleteOutputFiles) {
+                                        fs.unlinkSync(oFile);
+                                    }
                                 } else {
-                                    showDiff();
+                                    this.output.appendLine(' WA');
+
+                                    let showDiff = () => {
+                                        vscode.workspace.openTextDocument(oFile).then(doc => {
+                                            vscode.window.showTextDocument(doc, vscode.ViewColumn.Two).then(editor => {
+                                                let diffTitle = outputFile + '⟷' + acceptFile;
+                                                vscode.commands.executeCommand('vscode.diff',
+                                                    vscode.Uri.file(oFile),
+                                                    vscode.Uri.file(aFile),
+                                                    diffTitle
+                                                );
+                                            });
+                                            let iFile = path.join(executor.codeDir, inputFile);
+                                            vscode.workspace.openTextDocument(iFile).then(doc => {
+                                                vscode.window.showTextDocument(doc, vscode.ViewColumn.One);
+                                            });
+                                            this.cleanup(executor);
+                                        });
+
+                                    }
+
+                                    if (vscode.window.activeTextEditor.document.fileName == oFile) {
+                                        vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
+                                            showDiff();
+                                        });
+                                    } else {
+                                        showDiff();
+                                    }
+
+
+                                    return;
                                 }
-
-
-                                return;
+                            } else {
+                                this.output.append(' ' + executor.acceptExtension + ' empty');
                             }
-                        } else {
-                            this.output.append(' ' + executor.acceptExtension + ' empty');
                         }
-                    }
 
-                    this.output.appendLine('');
-                }
-                else {
-                    this.output.appendLine('RTE');
-                    if (!this.traceError(executor, runCmd, includePath)) {
-                        this.output.appendLine(stderr);
-                        this.jumpToErrorPosition(executor, stderr);
-                        this.cleanup(executor);
+                        this.output.appendLine('');
                     }
-                    return;
+                    else {
+                        this.output.appendLine('RTE');
+                        if (!this.traceError(executor, runCmd, includePath)) {
+                            this.output.appendLine(stderr);
+                            this.jumpToErrorPosition(executor, stderr);
+                            this.cleanup(executor);
+                        }
+                        return;
+                    }
                 }
 
                 inputFiles.shift();
@@ -496,6 +518,7 @@ export class IORunManager {
             executor.clearPreviousOutput = this.config.get<boolean>('clearPreviousOutput');
             executor.cleanupAfterRun = this.config.get<boolean>('cleanupAfterRun');
             executor.deleteOutputFiles = this.config.get<boolean>('deleteOutputFiles');
+            executor.timeLimit = this.config.get<number>('timeLimit');
         }
 
         return executor;

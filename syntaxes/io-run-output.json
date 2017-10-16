@@ -24,7 +24,7 @@
           "name": "invalid"
         }
       },
-      "match": " (STOPPED|WA|RTE|error!|empty)$"
+      "match": " (STOPPED|WA|RTE|TLE|error!|empty)$"
     },
     {
       "captures": {

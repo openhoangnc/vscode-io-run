@@ -1,3 +1,6 @@
+### 1.0.6
+* Add option to set the maximum execution time
+
 ### 1.0.5
 * Fix bug in activating the extension in Linux
 
