@@ -6,10 +6,10 @@ let debuggers = {
 };
 
 
-export function TraceError(debuggerName: string, runCmd: string, codeDir: string, path: string, onDone: Function): boolean {
+export function TraceError(debuggerName: string, runCmd: string, codeDir: string, processEnv: NodeJS.ProcessEnv, onDone: Function): boolean {
     let d = debuggers[debuggerName]
     if (!d) return false;
-    return d(runCmd, codeDir, path, onDone);
+    return d(runCmd, codeDir, processEnv, onDone);
 }
 
 function replaceVar(cmd: string, files: any): string {
@@ -41,7 +41,7 @@ function parseRunCmd(runCmd: string): any {
     return null;
 }
 
-function lldbTrace(runCmd: string, codeDir: string, path: string, onDone: Function): boolean {
+function lldbTrace(runCmd: string, codeDir: string, processEnv: NodeJS.ProcessEnv, onDone: Function): boolean {
     let files = parseRunCmd(runCmd);
     if (runCmd == null) return false;
 
@@ -49,7 +49,7 @@ function lldbTrace(runCmd: string, codeDir: string, path: string, onDone: Functi
     let launch = replaceVar("lldb ${exec}", files);
     let run = replaceVar("process launch -i ${inputFile} -o ${outputFile}", files);
 
-    let process = require('child_process').exec(launch, { cwd: codeDir, env: { PATH: path } }, (err, stdout, stderr) => {
+    let process = require('child_process').exec(launch, { cwd: codeDir, env: processEnv }, (err, stdout, stderr) => {
         let output = stdout.toString();
         let m = output.match(/Process \d+ stopped([\S\s]+)$/);
         const lineEnd = "(lldb) q";
@@ -105,7 +105,7 @@ function getFreePort(port, onFound) {
     });
 }
 
-function gdbTrace(runCmd: string, codeDir: string, path: string, onDone: Function): boolean {
+function gdbTrace(runCmd: string, codeDir: string, processEnv: NodeJS.ProcessEnv, onDone: Function): boolean {
     let files = parseRunCmd(runCmd);
     if (runCmd == null) return false;
     getFreePort(23456, function (port) {
@@ -118,12 +118,12 @@ function gdbTrace(runCmd: string, codeDir: string, path: string, onDone: Functio
         let quitCmdSent = false;
         let stopped = false;
 
-        let processGdbServer = require('child_process').exec(gdbserverCmd, { cwd: codeDir, env: { PATH: path } });
+        let processGdbServer = require('child_process').exec(gdbserverCmd, { cwd: codeDir, env: processEnv });
 
         processGdbServer.stderr.on("data", (data) => {
             // console.log(data);
             if (data.match(/Listening on port \d+/)) {
-                let processGdb = require('child_process').exec(gdbCmd, { cwd: codeDir, env: { PATH: path } }, (err, stdout, stderr) => {
+                let processGdb = require('child_process').exec(gdbCmd, { cwd: codeDir, env: processEnv }, (err, stdout, stderr) => {
                     // console.log(stdout);
                     let m = stdout.match(/(Program received signal [\S\s]+)$/);
                     if (m && m.length > 0) {

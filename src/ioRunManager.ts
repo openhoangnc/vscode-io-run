@@ -162,12 +162,14 @@ export class IORunManager {
         }
 
         let compileCmd = this.setCmdVar(executor, executor.compileCmd);
-        let includePath = process.env.PATH;
+        let processEnv = Object.assign({}, process.env);
         if (executor.PATH) {
-            includePath = executor.PATH + path.delimiter + includePath;
+            processEnv.PATH = executor.PATH + path.delimiter + processEnv.PATH;
         }
+        processEnv.PATH = executor.codeDir + path.delimiter + processEnv.PATH;
+
         this.output.append('[' + executor.codeFile + '] compiling... ');
-        this.process = require('child_process').exec(compileCmd, { cwd: executor.codeDir, env: { PATH: includePath } });
+        this.process = require('child_process').exec(compileCmd, { cwd: executor.codeDir, env: processEnv });
 
         let stdout = '';
         let stderr = '';
@@ -215,11 +217,12 @@ export class IORunManager {
             runCmd = tools.replaceVar(runCmd, "outputFile", outputFile);
 
             this.output.append('[' + path.basename(inputFile + '] as input, running... '));
-            let includePath = process.env.PATH
+            let processEnv = Object.assign({}, process.env);
             if (executor.PATH) {
-                includePath = executor.PATH + path.delimiter + includePath;
+                processEnv.PATH = executor.PATH + path.delimiter + processEnv.PATH;
             }
-            includePath = executor.codeDir + path.delimiter + includePath;
+
+            processEnv.PATH = executor.codeDir + path.delimiter + processEnv.PATH;
             let startTime = new Date();
             if (this.executeTimer != null) {
                 clearTimeout(this.executeTimer);
@@ -236,7 +239,7 @@ export class IORunManager {
                 }, executor.timeLimit * 1000);
             }
 
-            this.process = require('child_process').exec(runCmd, { cwd: executor.codeDir, env: { PATH: includePath } }, (err, stdout, stderr) => {
+            this.process = require('child_process').exec(runCmd, { cwd: executor.codeDir, env: processEnv }, (err, stdout, stderr) => {
                 if (this.killRequested) {
                     this.output.appendLine('STOPPED');
                     this.killRequested = false;
@@ -309,7 +312,7 @@ export class IORunManager {
                     }
                     else {
                         this.output.appendLine('RTE');
-                        if (!this.traceError(executor, runCmd, includePath)) {
+                        if (!this.traceError(executor, runCmd, processEnv)) {
                             this.output.appendLine(stderr);
                             this.jumpToErrorPosition(executor, stderr);
                             this.cleanup(executor);
@@ -330,8 +333,8 @@ export class IORunManager {
         runTopInput();
     }
 
-    private traceError(executor: any, runCmd: string, path: string): boolean {
-        return et.TraceError(executor.errorTracer, runCmd, executor.codeDir, path, (output) => {
+    private traceError(executor: any, runCmd: string, processEnv: NodeJS.ProcessEnv): boolean {
+        return et.TraceError(executor.errorTracer, runCmd, executor.codeDir, processEnv, (output) => {
             this.output.appendLine(output);
             this.jumpToErrorPosition(executor, output);
             this.cleanup(executor);
@@ -360,7 +363,13 @@ export class IORunManager {
         if (executor.cleanupAfterRun && executor.cleanupCmd) {
             let cleanupCmd = this.setCmdVar(executor, executor.cleanupCmd);
             this.output.append('cleanup... ');
-            this.process = require('child_process').exec(cleanupCmd, { cwd: executor.codeDir });
+            let processEnv = Object.assign({}, process.env);
+            if (executor.PATH) {
+                processEnv.PATH = executor.PATH + path.delimiter + processEnv.PATH;
+            }
+            processEnv.PATH = executor.codeDir + path.delimiter + processEnv.PATH;
+
+            this.process = require('child_process').exec(cleanupCmd, { cwd: executor.codeDir, env: processEnv });
             this.process.on('close', (code) => {
                 this.process = null;
                 this.output.appendLine('done');
