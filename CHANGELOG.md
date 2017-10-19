@@ -1,3 +1,6 @@
+### 1.0.8
+* Fix the executor config of Pascal
+
 ### 1.0.7
 * Fix issue with passing environment variables to child process. Fixes [Issue #2](https://github.com/openhoangnc/vscode-io-run/issues/2)
 
