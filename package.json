@@ -2,7 +2,7 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
@@ -151,10 +151,10 @@
               "runCmd": "lua ${codeFile} <${inputFile} >${outputFile}"
             },
             ".pas": {
-              "compileCmd": "fpc -g ${codeFile} -o ${codeFileNoExt}",
-              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
-              "cleanupCmd": "rm ${codeFileNoExt}",
-              "errorTracer": "gdb"
+                "compileCmd": "fpc -g ${codeFile} -o${codeFileNoExt}",
+                "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+                "cleanupCmd": "rm ${codeFileNoExt} ${codeFileNoExt.o}",
+                "errorTracer": "gdb"
             },
             ".py": {
               "runCmd": "python ${codeFile} <${inputFile} >${outputFile}"
@@ -208,7 +208,7 @@
               "errorTracer": "lldb"
             },
             ".pas": {
-              "cleanupCmd": "rm ${codeFileNoExt} && rm -rf ${codeFileNoExt.dSYM}",
+              "cleanupCmd": "rm ${codeFileNoExt} ${codeFileNoExt.o} && rm -rf ${codeFileNoExt.dSYM}",
               "errorTracer": "lldb"
             },
             ".rs": {
@@ -242,8 +242,9 @@
               "cleanupCmd": "del ${codeFileNoExt.class}"
             },
             ".pas": {
+              "compileCmd": "fpc -g ${codeFile} -o${codeFileNoExt.exe}",
               "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
-              "cleanupCmd": "del ${codeFileNoExt.exe}"
+              "cleanupCmd": "del ${codeFileNoExt.exe} ${codeFileNoExt.o}"
             },
             ".rs": {
               "cleanupCmd": "del ${codeFileNoExt}"
