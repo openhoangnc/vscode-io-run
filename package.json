@@ -1,7 +1,7 @@
 {
   "name": "io-run",
   "displayName": "IORun",
-  "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
+  "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
   "version": "1.0.9",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
@@ -147,22 +147,27 @@
             ".js": {
               "runCmd": "node ${codeFile} <${inputFile} >${outputFile}"
             },
-            ".kt":{
-                "compileCmd": "kotlinc ${codeFile} -include-runtime -d ${codeFileNoExt.jar}",
-                "runCmd": "java -jar ${codeFileNoExt.jar} <${inputFile} >${outputFile}",
-                "cleanupCmd": "rm ${codeFileNoExt.jar}"
+            ".kt": {
+              "compileCmd": "kotlinc ${codeFile} -include-runtime -d ${codeFileNoExt.jar}",
+              "runCmd": "java -jar ${codeFileNoExt.jar} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt.jar}"
             },
-            ".kts":{
-                "runCmd": "kotlinc -script ${codeFile} <${inputFile} >${outputFile}"
+            ".kts": {
+              "runCmd": "kotlinc -script ${codeFile} <${inputFile} >${outputFile}"
             },
             ".lua": {
               "runCmd": "lua ${codeFile} <${inputFile} >${outputFile}"
             },
+            ".ml": {
+              "compileCmd": "ocamlc ${codeFile} -o ${codeFileNoExt}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt}"
+            },
             ".pas": {
-                "compileCmd": "fpc -g ${codeFile} -o${codeFileNoExt}",
-                "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
-                "cleanupCmd": "rm ${codeFileNoExt} ${codeFileNoExt.o}",
-                "errorTracer": "gdb"
+              "compileCmd": "fpc -g ${codeFile} -o${codeFileNoExt}",
+              "runCmd": "${dirCodeFileNoExt} <${inputFile} >${outputFile}",
+              "cleanupCmd": "rm ${codeFileNoExt} ${codeFileNoExt.o}",
+              "errorTracer": "gdb"
             },
             ".py": {
               "runCmd": "python ${codeFile} <${inputFile} >${outputFile}"
@@ -251,6 +256,10 @@
             },
             ".kt": {
               "cleanupCmd": "del ${codeFileNoExt.jar}"
+            },
+            ".ml": {
+              "compileCmd": "ocamlc ${codeFile} -o ${codeFileNoExt.exe}",
+              "cleanupCmd": "del ${codeFileNoExt.exe}"
             },
             ".pas": {
               "compileCmd": "fpc -g ${codeFile} -o${codeFileNoExt.exe}",
@@ -358,6 +367,6 @@
   "devDependencies": {
     "typescript": "^2.5.3",
     "vscode": "^1.1.5",
-    "@types/node": "^8.0.33"
+    "@types/node": "^8.0.47"
   }
 }

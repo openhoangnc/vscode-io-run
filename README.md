@@ -2,7 +2,7 @@
 
  [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/hoangnc.io-run.svg)](https://marketplace.visualstudio.com/items?itemName=hoangnc.io-run) [![Installs](https://vsmarketplacebadge.apphb.com/installs/hoangnc.io-run.svg)](https://marketplace.visualstudio.com/items?itemName=hoangnc.io-run) [![Rating](https://vsmarketplacebadge.apphb.com/rating/hoangnc.io-run.svg)](https://marketplace.visualstudio.com/items?itemName=hoangnc.io-run) [![Build Status](https://travis-ci.org/openhoangnc/vscode-io-run.svg?branch=master)](https://travis-ci.org/openhoangnc/vscode-io-run)
 
-Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e **C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift**
+Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e **C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift**
 
 ## Donation
 

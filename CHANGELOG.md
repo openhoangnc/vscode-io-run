@@ -1,3 +1,6 @@
+### 1.0.9
+* Add executor config for Kotlin and OCaml
+
 ### 1.0.8
 * Fix the executor config of Pascal
 
