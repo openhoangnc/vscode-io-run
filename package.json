@@ -147,6 +147,14 @@
             ".js": {
               "runCmd": "node ${codeFile} <${inputFile} >${outputFile}"
             },
+            ".kt":{
+                "compileCmd": "kotlinc ${codeFile} -include-runtime -d ${codeFileNoExt.jar}",
+                "runCmd": "java -jar ${codeFileNoExt.jar} <${inputFile} >${outputFile}",
+                "cleanupCmd": "rm ${codeFileNoExt.jar}"
+            },
+            ".kts":{
+                "runCmd": "kotlinc -script ${codeFile} <${inputFile} >${outputFile}"
+            },
             ".lua": {
               "runCmd": "lua ${codeFile} <${inputFile} >${outputFile}"
             },
@@ -240,6 +248,9 @@
             },
             ".java": {
               "cleanupCmd": "del ${codeFileNoExt.class}"
+            },
+            ".kt": {
+              "cleanupCmd": "del ${codeFileNoExt.jar}"
             },
             ".pas": {
               "compileCmd": "fpc -g ${codeFile} -o${codeFileNoExt.exe}",
