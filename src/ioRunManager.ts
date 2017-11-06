@@ -283,10 +283,12 @@ export class IORunManager {
                                                     diffTitle
                                                 );
                                             });
-                                            let iFile = path.join(executor.codeDir, inputFile);
-                                            vscode.workspace.openTextDocument(iFile).then(doc => {
-                                                vscode.window.showTextDocument(doc, vscode.ViewColumn.One);
-                                            });
+                                            if (executor.showInputFileOnWrongAnswer) {
+                                                let iFile = path.join(executor.codeDir, inputFile);
+                                                vscode.workspace.openTextDocument(iFile).then(doc => {
+                                                    vscode.window.showTextDocument(doc, vscode.ViewColumn.One);
+                                                });
+                                            }
                                             this.cleanup(executor);
                                         });
 
@@ -528,6 +530,7 @@ export class IORunManager {
             executor.cleanupAfterRun = this.config.get<boolean>('cleanupAfterRun');
             executor.deleteOutputFiles = this.config.get<boolean>('deleteOutputFiles');
             executor.timeLimit = this.config.get<number>('timeLimit');
+            executor.showInputFileOnWrongAnswer = this.config.get<boolean>('showInputFileOnWrongAnswer');
         }
 
         return executor;
