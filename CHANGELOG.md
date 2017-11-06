@@ -1,3 +1,6 @@
+### 1.0.10
+* Add option whether to show input file [PR #4](https://github.com/openhoangnc/vscode-io-run/pull/4)
+
 ### 1.0.9
 * Add executor config for Kotlin and OCaml
 
