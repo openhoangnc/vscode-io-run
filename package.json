@@ -340,6 +340,11 @@
           "type": "boolean",
           "default": true,
           "description": "Whether to show input file along with output/answer compare when you get wrong answer."
+        },
+        "io-run.showErrorOutputOnWrongAnswer": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show stderr when you get wrong answer, useful to people who debug by printing values."
         }
       }
     },

@@ -253,7 +253,7 @@ export class IORunManager {
                     let elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000;
 
                     this.process = null;
-                    if (err == null && stderr.length == 0) {
+                    if (err == null) {
                         this.output.append('done ' + elapsedTime.toFixed(3) + 's');
 
                         let oFile = path.join(executor.codeDir, outputFile);
@@ -272,6 +272,9 @@ export class IORunManager {
                                     }
                                 } else {
                                     this.output.appendLine(' WA');
+                                    if (executor.showErrorOutputOnWrongAnswer) {
+                                        this.output.appendLine(stderr);
+                                    }
 
                                     let showDiff = () => {
                                         vscode.workspace.openTextDocument(oFile).then(doc => {
@@ -531,6 +534,7 @@ export class IORunManager {
             executor.deleteOutputFiles = this.config.get<boolean>('deleteOutputFiles');
             executor.timeLimit = this.config.get<number>('timeLimit');
             executor.showInputFileOnWrongAnswer = this.config.get<boolean>('showInputFileOnWrongAnswer');
+            executor.showErrorOutputOnWrongAnswer = this.config.get<boolean>('showErrorOutputOnWrongAnswer');
         }
 
         return executor;
