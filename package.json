@@ -267,7 +267,9 @@
               "cleanupCmd": "del ${codeFileNoExt.exe} ${codeFileNoExt.o}"
             },
             ".rs": {
-              "cleanupCmd": "del ${codeFileNoExt}"
+              "compileCmd": "rustc -g -o ${codeFileNoExt.exe} ${codeFile}",
+              "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
+              "cleanupCmd": "del ${codeFileNoExt.exe} ${codeFileNoExt.pdb}"
             },
             ".scala": {
               "cleanupCmd": "del ${codeFileNoExt.class} ${codeFileNoExt$.class}"
