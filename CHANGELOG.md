@@ -1,3 +1,6 @@
+### 1.0.11
+* Fix the executor config of Rust in Windows
+
 ### 1.0.10
 * Add option whether to show input file [PR #4](https://github.com/openhoangnc/vscode-io-run/pull/4)
 
