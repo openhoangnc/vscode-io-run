@@ -248,6 +248,7 @@
             },
             ".go": {
               "PATH": "C:\\Go\\bin",
+              "compileCmd": "go build -o ${codeFileNoExt.exe} ${codeFile}",
               "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
               "cleanupCmd": "del ${codeFileNoExt.exe}"
             },
