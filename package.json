@@ -2,7 +2,7 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {

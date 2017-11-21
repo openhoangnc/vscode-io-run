@@ -1,3 +1,6 @@
+### 1.0.12
+* Fix the executor config of cmd/bat files
+
 ### 1.0.11
 * Fix the executor config of Rust in Windows
 
