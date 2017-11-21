@@ -282,10 +282,10 @@
               "runCmd": "Powershell.exe -File ${dirCodeFile} <${inputFile} >${outputFile}"
             },
             ".cmd": {
-              "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
+              "runCmd": "cmd.exe /C ${dirCodeFile} <${inputFile} >${outputFile}"
             },
             ".bat": {
-              "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
+              "runCmd": "cmd.exe /C ${dirCodeFile} <${inputFile} >${outputFile}"
             }
           }
         },
