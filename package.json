@@ -2,11 +2,11 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
-    "vscode": "^1.17.0"
+    "vscode": "^1.22.1"
   },
   "categories": [
     "Languages",
@@ -368,13 +368,13 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "dependencies": {
-    "node-machine-id": "^1.1.9",
+    "node-machine-id": "^1.1.10",
     "tree-kill": "^1.2.0",
-    "universal-analytics": "^0.4.15"
+    "universal-analytics": "0.4.16"
   },
   "devDependencies": {
-    "typescript": "^2.5.3",
-    "vscode": "^1.1.5",
-    "@types/node": "^8.0.47"
+    "typescript": "^2.8.1",
+    "vscode": "^1.1.14",
+    "@types/node": "^9.6.4"
   }
 }

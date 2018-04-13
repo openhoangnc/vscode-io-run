@@ -48,8 +48,8 @@ export class IORunManager {
         if (codeFile == null) return;
 
         let codeFileNoExt = tools.getFileNoExtension(codeFile)
-        let inputExt = this.config.get<string>('inputExtension').toLowerCase();
-        let acceptExt = this.config.get<string>('acceptExtension').toLowerCase();
+        let inputExt = this.config.inputExtension.toLowerCase();
+        let acceptExt = this.config.acceptExtension.toLowerCase();
 
         let pad = x => { return (x < 10) ? ('0' + x) : x };
 
@@ -513,7 +513,7 @@ export class IORunManager {
     private getExecutor(codeFile: string): any {
         let executorMap = this.getExecutorMap();
         let ext = path.extname(codeFile);
-        let executor = executorMap[ext];
+        var executor = executorMap[ext];
         if (executor) {
             executor.codeDir = path.dirname(codeFile);
             executor.codeExt = ext;
@@ -522,37 +522,40 @@ export class IORunManager {
             executor.codeDirFile = codeFile;
             executor.codeDirFileNoExt = tools.getFileNoExtension(codeFile);
 
-            executor.inputExtension = this.config.get<string>('inputExtension').toLowerCase();
-            executor.outputExtension = this.config.get<string>('outputExtension').toLowerCase();
-            executor.acceptExtension = this.config.get<string>('acceptExtension').toLowerCase();
-            executor.saveFileBeforeRun = this.config.get<boolean>('saveFileBeforeRun');
-            executor.clearPreviousOutput = this.config.get<boolean>('clearPreviousOutput');
-            executor.cleanupAfterRun = this.config.get<boolean>('cleanupAfterRun');
-            executor.deleteOutputFiles = this.config.get<boolean>('deleteOutputFiles');
-            executor.timeLimit = this.config.get<number>('timeLimit');
-            executor.showInputFileOnWrongAnswer = this.config.get<boolean>('showInputFileOnWrongAnswer');
+            executor.inputExtension = this.config.inputExtension.toLowerCase();
+            executor.outputExtension = this.config.outputExtension.toLowerCase();
+            executor.acceptExtension = this.config.acceptExtension.toLowerCase();
+            executor.saveFileBeforeRun = this.config.get('saveFileBeforeRun');
+            executor.clearPreviousOutput = this.config.get('clearPreviousOutput');
+            executor.cleanupAfterRun = this.config.get('cleanupAfterRun');
+            executor.deleteOutputFiles = this.config.get('deleteOutputFiles');
+            executor.timeLimit = this.config.get('timeLimit');
+            executor.showInputFileOnWrongAnswer = this.config.get('showInputFileOnWrongAnswer');
         }
 
         return executor;
     }
 
     private getExecutorMap(): any {
-        let commonMap = this.config.get<any>('executorMap.common');
-        let osMap = this.config.get<any>('executorMap.' + os.platform());
+        let commonMap = this.config.get('executorMap.common');
+        let osMap = this.config.get('executorMap.' + os.platform());
 
-        if (osMap != null) {
-            Object.keys(osMap).forEach(function (key) {
-                if (!commonMap[key]) {
-                    commonMap[key] = osMap[key];
+        let commonMapObject = tools.unwrap(commonMap);
+        let osMapObject = tools.unwrap(osMap);
+
+        if (osMapObject != null) {
+            Object.keys(osMapObject).forEach(function (key) {
+                if (!commonMapObject[key]) {
+                    commonMapObject[key] = osMapObject[key];
                 } else {
-                    Object.keys(osMap[key]).forEach(function (subkey) {
-                        commonMap[key][subkey] = osMap[key][subkey];
+                    Object.keys(osMapObject[key]).forEach(function (subkey) {
+                        commonMapObject[key][subkey] = osMapObject[key][subkey];
                     });
                 }
             });
         }
 
-        return commonMap;
+        return commonMapObject;
     }
 
     private getCodeFile(): string {
@@ -565,9 +568,9 @@ export class IORunManager {
             return activeFile;
         }
 
-        let inputExtension = this.config.get<string>('inputExtension').toLowerCase();
-        let outputExtension = this.config.get<string>('outputExtension').toLowerCase();
-        let acceptExtension = this.config.get<string>('acceptExtension').toLowerCase();
+        let inputExtension = this.config.inputExtension.toLowerCase();
+        let outputExtension = this.config.outputExtension.toLowerCase();
+        let acceptExtension = this.config.acceptExtension.toLowerCase();
 
         if (extension != inputExtension && extension != outputExtension && extension != acceptExtension) {
             return null;
