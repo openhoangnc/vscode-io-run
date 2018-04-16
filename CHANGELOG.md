@@ -1,3 +1,6 @@
+### 1.0.14
+* Fix error while running in powershell
+
 ### 1.0.13
 * Fix issue with VSCode version 1.22.1. Fixes [Issue #7](https://github.com/openhoangnc/vscode-io-run/issues/7)
 
