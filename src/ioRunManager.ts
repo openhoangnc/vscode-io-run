@@ -493,10 +493,10 @@ export class IORunManager {
 
             let delimiter = ' && ';
             if (os.platform() == 'win32') {
+                delimiter = ' & ';
                 if (vscode.workspace.getConfiguration("terminal.integrated.shell").get("windows", "").toLocaleLowerCase().endsWith("powershell.exe")) {
-                    delimiter = ' ; ';
-                } else {
-                    delimiter = ' & ';
+                    delimiter = ' "&" ';
+                    cmd = "cmd /c " + cmd;
                 }
             }
 
@@ -513,7 +513,7 @@ export class IORunManager {
     private getExecutor(codeFile: string): any {
         let executorMap = this.getExecutorMap();
         let ext = path.extname(codeFile);
-        var executor = executorMap[ext];
+        let executor = executorMap[ext];
         if (executor) {
             executor.codeDir = path.dirname(codeFile);
             executor.codeExt = ext;
