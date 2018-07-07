@@ -9,7 +9,7 @@
     "vscode": "^1.22.2"
   },
   "categories": [
-    "Languages",
+    "Programming Languages",
     "Other"
   ],
   "keywords": [
@@ -343,6 +343,26 @@
           "type": "boolean",
           "default": true,
           "description": "Whether to show input file along with output/answer compare when you get wrong answer."
+        },
+        "io-run.showDiffInOutputPanel": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show diff directly in output panel."
+        },
+        "io-run.continueOnFails": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to continue testing after failed on a testcase."
+        },
+        "io-run.diffIgnoreSpaces": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to ignore spaces when diff."
+        },
+        "io-run.showErrorOutputOnFails": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show stderr when fail tests, useful to people who debug by printing values."
         }
       }
     },
