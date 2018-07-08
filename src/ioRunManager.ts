@@ -262,7 +262,7 @@ export class IORunManager {
                         if (fs.existsSync(oFile)) {
                             if (fs.statSync(oFile).size == 0) {
                                 this.output.appendLine(' ' + executor.outputExtension + ' empty');
-                                if (executor.cleanupAfterRun) {
+                                if (executor.deleteOutputFiles) {
                                     fs.unlinkSync(oFile);
                                 }
                             } else if (fs.existsSync(aFile) && fs.statSync(aFile).size > 0) {
@@ -313,7 +313,10 @@ export class IORunManager {
                                         showDiff();
                                     }
 
-                                    if (!executor.continueOnFail || !executor.showDiffInOutputPanel) return;
+                                    if (!executor.continueOnFails || !executor.showDiffInOutputPanel) {
+                                        this.cleanup(executor);
+                                        return;
+                                    }
                                 }
                             } else {
                                 this.output.appendLine(' empty');
