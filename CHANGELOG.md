@@ -1,3 +1,11 @@
+### 1.1.0
+From [PR #9](https://github.com/openhoangnc/vscode-io-run/pull/9):
+* Update extension categories.
+* Add option to show diff directly in output panel.
+* Add option to ignore leading and trailing spaces when compare results [Issue #8](https://github.com/openhoangnc/vscode-io-run/issues/8).
+* Add option to continue testing after failed on a testcase.
+* Add option to show stderr when failed.
+
 ### 1.0.14
 * Fix error while running in powershell
 
