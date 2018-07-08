@@ -274,9 +274,6 @@ export class IORunManager {
                                     }
                                 } else {
                                     this.output.appendLine(' WA');
-                                    if (executor.showErrorOutputOnWrongAnswer) {
-                                        this.output.appendLine(stderr);
-                                    }
 
                                     let showDiff = () => {
                                         if (executor.showDiffInOutputPanel) {
