@@ -313,7 +313,7 @@ export class IORunManager {
                                         showDiff();
                                     }
 
-                                    if (!executor.continueOnFail || !executor.showDiffInOutputPanel) return;
+                                    if (!executor.continueOnFails || !executor.showDiffInOutputPanel) return;
                                 }
                             } else {
                                 this.output.appendLine(' empty');
