@@ -274,6 +274,9 @@ export class IORunManager {
                                     }
                                 } else {
                                     this.output.appendLine(' WA');
+                                    if (executor.showErrorOutputOnWrongAnswer) {
+                                        this.output.appendLine(stderr);
+                                    }
 
                                     let showDiff = () => {
                                         if (executor.showDiffInOutputPanel) {
@@ -544,7 +547,6 @@ export class IORunManager {
             executor.codeFileNoExt = path.basename(tools.getFileNoExtension(executor.codeFile));
             executor.codeDirFile = codeFile;
             executor.codeDirFileNoExt = tools.getFileNoExtension(codeFile);
-
             executor.inputExtension = this.config.inputExtension.toLowerCase();
             executor.outputExtension = this.config.outputExtension.toLowerCase();
             executor.acceptExtension = this.config.acceptExtension.toLowerCase();
