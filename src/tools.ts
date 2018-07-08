@@ -27,3 +27,17 @@ export function replaceVar(originalStr: string, varName: string, value: string):
 
     return originalStr.replace(regx, value + '$1');
 }
+
+
+export function unwrap(proxy): object {
+    if (typeof proxy !== 'object') {
+        return proxy;
+    }
+    let obj = {};
+    Object.keys(proxy).forEach(function (key) {
+        let s = proxy[key];
+        let u = unwrap(s);
+        obj[key] = u;
+    });
+    return obj;
+}

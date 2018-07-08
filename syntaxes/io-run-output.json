@@ -63,6 +63,30 @@
         }
       },
       "match": " (will be run)$"
+    },
+    {
+      "match": "^(Your output:)$",
+      "captures": {
+        "1": {
+          "name": "invalid"
+        }
+      }
+    },
+    {
+      "match": "^(Correct answer:)$",
+      "captures": {
+        "1": {
+          "name": "comment"
+        }
+      }
+    },
+    {
+      "match": "^(stderr:|Debug:)$",
+      "captures": {
+        "1": {
+          "name": "entity.name.function"
+        }
+      }
     }
   ]
 }

@@ -48,8 +48,8 @@ export class IORunManager {
         if (codeFile == null) return;
 
         let codeFileNoExt = tools.getFileNoExtension(codeFile)
-        let inputExt = this.config.get<string>('inputExtension').toLowerCase();
-        let acceptExt = this.config.get<string>('acceptExtension').toLowerCase();
+        let inputExt = this.config.inputExtension.toLowerCase();
+        let acceptExt = this.config.acceptExtension.toLowerCase();
 
         let pad = x => { return (x < 10) ? ('0' + x) : x };
 
@@ -240,6 +240,7 @@ export class IORunManager {
             }
 
             this.process = require('child_process').exec(runCmd, { cwd: executor.codeDir, env: processEnv }, (err, stdout, stderr) => {
+                let isOK = false;
                 if (this.killRequested) {
                     this.output.appendLine('STOPPED');
                     this.killRequested = false;
@@ -260,13 +261,14 @@ export class IORunManager {
                         let aFile = path.join(executor.codeDir, acceptFile);
                         if (fs.existsSync(oFile)) {
                             if (fs.statSync(oFile).size == 0) {
-                                this.output.append(' ' + executor.outputExtension + ' empty');
+                                this.output.appendLine(' ' + executor.outputExtension + ' empty');
                                 if (executor.cleanupAfterRun) {
                                     fs.unlinkSync(oFile);
                                 }
                             } else if (fs.existsSync(aFile) && fs.statSync(aFile).size > 0) {
                                 if (this.compareOA(executor, oFile, aFile)) {
-                                    this.output.append(' AC');
+                                    this.output.appendLine(' AC');
+                                    isOK = true;
                                     if (executor.deleteOutputFiles) {
                                         fs.unlinkSync(oFile);
                                     }
@@ -277,6 +279,15 @@ export class IORunManager {
                                     }
 
                                     let showDiff = () => {
+                                        if (executor.showDiffInOutputPanel) {
+                                            this.output.appendLine('Your output:');
+                                            let output = fs.readFileSync(oFile).toString();
+                                            this.output.appendLine(output.trim());
+                                            this.output.appendLine('Correct answer:');
+                                            let answer = fs.readFileSync(aFile).toString();
+                                            this.output.appendLine(answer.trim());
+                                            return;
+                                        }
                                         vscode.workspace.openTextDocument(oFile).then(doc => {
                                             vscode.window.showTextDocument(doc, vscode.ViewColumn.Two).then(editor => {
                                                 let diffTitle = outputFile + '⟷' + acceptFile;
@@ -305,15 +316,16 @@ export class IORunManager {
                                         showDiff();
                                     }
 
-
-                                    return;
+                                    if (!executor.continueOnFail || !executor.showDiffInOutputPanel) return;
                                 }
                             } else {
-                                this.output.append(' ' + executor.acceptExtension + ' empty');
+                                this.output.appendLine(' empty');
+                                this.output.appendLine('Your output:');
+                                let output = fs.readFileSync(oFile).toString();
+                                if (output.length > 100) { output = output.substr(0, 100) + '...'; }
+                                this.output.appendLine(output.trim());
                             }
                         }
-
-                        this.output.appendLine('');
                     }
                     else {
                         this.output.appendLine('RTE');
@@ -324,6 +336,12 @@ export class IORunManager {
                         }
                         return;
                     }
+                }
+                
+                // show stderr when fails
+                if (!isOK && executor.showErrorOutputOnFails && stderr.length > 0) {
+                    this.output.appendLine('stderr:');
+                    this.output.appendLine(stderr.trim());
                 }
 
                 inputFiles.shift();
@@ -356,10 +374,15 @@ export class IORunManager {
         while (true) {
             let oline = oLiner.next();
             let aline = aLiner.next();
-            if (oline.value != aline.value || oline.done != aline.done) {
+            if (oline.done || aline.done) {
+                return oline.done === aline.done;
+            }
+            if (executor.diffIgnoreSpaces) {
+                oline.value = (oline.value || '').trim();
+                aline.value = (aline.value || '').trim();
+            }
+            if (oline.value !== aline.value) {
                 return false;
-            } if (oline.done && aline.done) {
-                return true;
             }
         }
     }
@@ -496,10 +519,10 @@ export class IORunManager {
 
             let delimiter = ' && ';
             if (os.platform() == 'win32') {
+                delimiter = ' & ';
                 if (vscode.workspace.getConfiguration("terminal.integrated.shell").get("windows", "").toLocaleLowerCase().endsWith("powershell.exe")) {
-                    delimiter = ' ; ';
-                } else {
-                    delimiter = ' & ';
+                    delimiter = ' "&" ';
+                    cmd = "cmd /c " + cmd;
                 }
             }
 
@@ -524,39 +547,44 @@ export class IORunManager {
             executor.codeFileNoExt = path.basename(tools.getFileNoExtension(executor.codeFile));
             executor.codeDirFile = codeFile;
             executor.codeDirFileNoExt = tools.getFileNoExtension(codeFile);
-
-            executor.inputExtension = this.config.get<string>('inputExtension').toLowerCase();
-            executor.outputExtension = this.config.get<string>('outputExtension').toLowerCase();
-            executor.acceptExtension = this.config.get<string>('acceptExtension').toLowerCase();
-            executor.saveFileBeforeRun = this.config.get<boolean>('saveFileBeforeRun');
-            executor.clearPreviousOutput = this.config.get<boolean>('clearPreviousOutput');
-            executor.cleanupAfterRun = this.config.get<boolean>('cleanupAfterRun');
-            executor.deleteOutputFiles = this.config.get<boolean>('deleteOutputFiles');
-            executor.timeLimit = this.config.get<number>('timeLimit');
-            executor.showInputFileOnWrongAnswer = this.config.get<boolean>('showInputFileOnWrongAnswer');
-            executor.showErrorOutputOnWrongAnswer = this.config.get<boolean>('showErrorOutputOnWrongAnswer');
+            executor.inputExtension = this.config.inputExtension.toLowerCase();
+            executor.outputExtension = this.config.outputExtension.toLowerCase();
+            executor.acceptExtension = this.config.acceptExtension.toLowerCase();
+            executor.saveFileBeforeRun = this.config.get('saveFileBeforeRun');
+            executor.clearPreviousOutput = this.config.get('clearPreviousOutput');
+            executor.cleanupAfterRun = this.config.get('cleanupAfterRun');
+            executor.deleteOutputFiles = this.config.get('deleteOutputFiles');
+            executor.timeLimit = this.config.get('timeLimit');
+            executor.showInputFileOnWrongAnswer = this.config.get('showInputFileOnWrongAnswer');
+            executor.showDiffInOutputPanel = this.config.get('showDiffInOutputPanel');
+            executor.continueOnFails = this.config.get('continueOnFails');
+            executor.diffIgnoreSpaces = this.config.get('diffIgnoreSpaces');
+            executor.showErrorOutputOnFails = this.config.get<boolean>('showErrorOutputOnFails');
         }
 
         return executor;
     }
 
     private getExecutorMap(): any {
-        let commonMap = this.config.get<any>('executorMap.common');
-        let osMap = this.config.get<any>('executorMap.' + os.platform());
+        let commonMap = this.config.get('executorMap.common');
+        let osMap = this.config.get('executorMap.' + os.platform());
 
-        if (osMap != null) {
-            Object.keys(osMap).forEach(function (key) {
-                if (!commonMap[key]) {
-                    commonMap[key] = osMap[key];
+        let commonMapObject = tools.unwrap(commonMap);
+        let osMapObject = tools.unwrap(osMap);
+
+        if (osMapObject != null) {
+            Object.keys(osMapObject).forEach(function (key) {
+                if (!commonMapObject[key]) {
+                    commonMapObject[key] = osMapObject[key];
                 } else {
-                    Object.keys(osMap[key]).forEach(function (subkey) {
-                        commonMap[key][subkey] = osMap[key][subkey];
+                    Object.keys(osMapObject[key]).forEach(function (subkey) {
+                        commonMapObject[key][subkey] = osMapObject[key][subkey];
                     });
                 }
             });
         }
 
-        return commonMap;
+        return commonMapObject;
     }
 
     private getCodeFile(): string {
@@ -569,9 +597,9 @@ export class IORunManager {
             return activeFile;
         }
 
-        let inputExtension = this.config.get<string>('inputExtension').toLowerCase();
-        let outputExtension = this.config.get<string>('outputExtension').toLowerCase();
-        let acceptExtension = this.config.get<string>('acceptExtension').toLowerCase();
+        let inputExtension = this.config.inputExtension.toLowerCase();
+        let outputExtension = this.config.outputExtension.toLowerCase();
+        let acceptExtension = this.config.acceptExtension.toLowerCase();
 
         if (extension != inputExtension && extension != outputExtension && extension != acceptExtension) {
             return null;

@@ -1,3 +1,15 @@
+### 1.0.14
+* Fix error while running in powershell
+
+### 1.0.13
+* Fix issue with VSCode version 1.22.1. Fixes [Issue #7](https://github.com/openhoangnc/vscode-io-run/issues/7)
+
+### 1.0.12
+* Fix the executor config of cmd/bat files
+
+### 1.0.11
+* Fix the executor config of Rust in Windows
+
 ### 1.0.10
 * Add option whether to show input file [PR #4](https://github.com/openhoangnc/vscode-io-run/pull/4)
 

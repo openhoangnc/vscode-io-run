@@ -2,14 +2,14 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.0.10",
+  "version": "1.0.14",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
-    "vscode": "^1.17.0"
+    "vscode": "^1.22.2"
   },
   "categories": [
-    "Languages",
+    "Programming Languages",
     "Other"
   ],
   "keywords": [
@@ -248,6 +248,7 @@
             },
             ".go": {
               "PATH": "C:\\Go\\bin",
+              "compileCmd": "go build -o ${codeFileNoExt.exe} ${codeFile}",
               "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
               "cleanupCmd": "del ${codeFileNoExt.exe}"
             },
@@ -267,7 +268,9 @@
               "cleanupCmd": "del ${codeFileNoExt.exe} ${codeFileNoExt.o}"
             },
             ".rs": {
-              "cleanupCmd": "del ${codeFileNoExt}"
+              "compileCmd": "rustc -g -o ${codeFileNoExt.exe} ${codeFile}",
+              "runCmd": "${dirCodeFileNoExt.exe} <${inputFile} >${outputFile}",
+              "cleanupCmd": "del ${codeFileNoExt.exe} ${codeFileNoExt.pdb}"
             },
             ".scala": {
               "cleanupCmd": "del ${codeFileNoExt.class} ${codeFileNoExt$.class}"
@@ -279,10 +282,10 @@
               "runCmd": "Powershell.exe -File ${dirCodeFile} <${inputFile} >${outputFile}"
             },
             ".cmd": {
-              "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
+              "runCmd": "cmd.exe /C ${dirCodeFile} <${inputFile} >${outputFile}"
             },
             ".bat": {
-              "runCmd": "cmd.exe -C ${dirCodeFile} <${inputFile} >${outputFile}"
+              "runCmd": "cmd.exe /C ${dirCodeFile} <${inputFile} >${outputFile}"
             }
           }
         },
@@ -341,10 +344,25 @@
           "default": true,
           "description": "Whether to show input file along with output/answer compare when you get wrong answer."
         },
-        "io-run.showErrorOutputOnWrongAnswer": {
+        "io-run.showDiffInOutputPanel": {
           "type": "boolean",
           "default": false,
-          "description": "Whether to show stderr when you get wrong answer, useful to people who debug by printing values."
+          "description": "Whether to show diff directly in output panel."
+        },
+        "io-run.continueOnFails": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to continue testing after failed on a testcase."
+        },
+        "io-run.diffIgnoreSpaces": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to ignore spaces when diff."
+        },
+        "io-run.showErrorOutputOnFails": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show stderr when fail tests, useful to people who debug by printing values."
         }
       }
     },
@@ -370,13 +388,13 @@
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "dependencies": {
-    "node-machine-id": "^1.1.9",
+    "node-machine-id": "^1.1.10",
     "tree-kill": "^1.2.0",
-    "universal-analytics": "^0.4.15"
+    "universal-analytics": "0.4.16"
   },
   "devDependencies": {
-    "typescript": "^2.5.3",
-    "vscode": "^1.1.5",
-    "@types/node": "^8.0.47"
+    "typescript": "^2.8.1",
+    "vscode": "^1.1.14",
+    "@types/node": "^9.6.4"
   }
 }
