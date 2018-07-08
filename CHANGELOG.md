@@ -1,3 +1,6 @@
+### 1.1.1
+* Fix the option to continue testing after failed on a testcase [PR #10](https://github.com/openhoangnc/vscode-io-run/pull/10).
+
 ### 1.1.0
 From [PR #9](https://github.com/openhoangnc/vscode-io-run/pull/9):
 * Update extension categories.
