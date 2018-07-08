@@ -240,6 +240,7 @@ export class IORunManager {
             }
 
             this.process = require('child_process').exec(runCmd, { cwd: executor.codeDir, env: processEnv }, (err, stdout, stderr) => {
+                let isOK = false;
                 if (this.killRequested) {
                     this.output.appendLine('STOPPED');
                     this.killRequested = false;
@@ -253,20 +254,21 @@ export class IORunManager {
                     let elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000;
 
                     this.process = null;
-                    if (err == null && stderr.length == 0) {
+                    if (err == null) {
                         this.output.append('done ' + elapsedTime.toFixed(3) + 's');
 
                         let oFile = path.join(executor.codeDir, outputFile);
                         let aFile = path.join(executor.codeDir, acceptFile);
                         if (fs.existsSync(oFile)) {
                             if (fs.statSync(oFile).size == 0) {
-                                this.output.append(' ' + executor.outputExtension + ' empty');
+                                this.output.appendLine(' ' + executor.outputExtension + ' empty');
                                 if (executor.cleanupAfterRun) {
                                     fs.unlinkSync(oFile);
                                 }
                             } else if (fs.existsSync(aFile) && fs.statSync(aFile).size > 0) {
                                 if (this.compareOA(executor, oFile, aFile)) {
-                                    this.output.append(' AC');
+                                    this.output.appendLine(' AC');
+                                    isOK = true;
                                     if (executor.deleteOutputFiles) {
                                         fs.unlinkSync(oFile);
                                     }
@@ -274,6 +276,15 @@ export class IORunManager {
                                     this.output.appendLine(' WA');
 
                                     let showDiff = () => {
+                                        if (executor.showDiffInOutputPanel) {
+                                            this.output.appendLine('Your output:');
+                                            let output = fs.readFileSync(oFile).toString();
+                                            this.output.appendLine(output.trim());
+                                            this.output.appendLine('Correct answer:');
+                                            let answer = fs.readFileSync(aFile).toString();
+                                            this.output.appendLine(answer.trim());
+                                            return;
+                                        }
                                         vscode.workspace.openTextDocument(oFile).then(doc => {
                                             vscode.window.showTextDocument(doc, vscode.ViewColumn.Two).then(editor => {
                                                 let diffTitle = outputFile + '⟷' + acceptFile;
@@ -302,15 +313,16 @@ export class IORunManager {
                                         showDiff();
                                     }
 
-
-                                    return;
+                                    if (!executor.continueOnFail || !executor.showDiffInOutputPanel) return;
                                 }
                             } else {
-                                this.output.append(' ' + executor.acceptExtension + ' empty');
+                                this.output.appendLine(' empty');
+                                this.output.appendLine('Your output:');
+                                let output = fs.readFileSync(oFile).toString();
+                                if (output.length > 100) { output = output.substr(0, 100) + '...'; }
+                                this.output.appendLine(output.trim());
                             }
                         }
-
-                        this.output.appendLine('');
                     }
                     else {
                         this.output.appendLine('RTE');
@@ -321,6 +333,12 @@ export class IORunManager {
                         }
                         return;
                     }
+                }
+                
+                // show stderr when fails
+                if (!isOK && executor.showErrorOutputOnFails && stderr.length > 0) {
+                    this.output.appendLine('stderr:');
+                    this.output.appendLine(stderr.trim());
                 }
 
                 inputFiles.shift();
@@ -353,10 +371,15 @@ export class IORunManager {
         while (true) {
             let oline = oLiner.next();
             let aline = aLiner.next();
-            if (oline.value != aline.value || oline.done != aline.done) {
+            if (oline.done || aline.done) {
+                return oline.done === aline.done;
+            }
+            if (executor.diffIgnoreSpaces) {
+                oline.value = (oline.value || '').trim();
+                aline.value = (aline.value || '').trim();
+            }
+            if (oline.value !== aline.value) {
                 return false;
-            } if (oline.done && aline.done) {
-                return true;
             }
         }
     }
@@ -531,6 +554,10 @@ export class IORunManager {
             executor.deleteOutputFiles = this.config.get('deleteOutputFiles');
             executor.timeLimit = this.config.get('timeLimit');
             executor.showInputFileOnWrongAnswer = this.config.get('showInputFileOnWrongAnswer');
+            executor.showDiffInOutputPanel = this.config.get('showDiffInOutputPanel');
+            executor.continueOnFails = this.config.get('continueOnFails');
+            executor.diffIgnoreSpaces = this.config.get('diffIgnoreSpaces');
+            executor.showErrorOutputOnFails = this.config.get<boolean>('showErrorOutputOnFails');
         }
 
         return executor;
