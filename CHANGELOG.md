@@ -1,3 +1,6 @@
+### 1.1.2
+* npm audit fix.
+
 ### 1.1.1
 * Fix the option to continue testing after failed on a testcase [PR #10](https://github.com/openhoangnc/vscode-io-run/pull/10).
 
