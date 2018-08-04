@@ -394,8 +394,8 @@
     "universal-analytics": "0.4.17"
   },
   "devDependencies": {
+    "@types/node": "^9.6.25",
     "typescript": "^2.9.2",
-    "vscode": "^1.1.18",
-    "@types/node": "^9.6.4"
+    "vscode": "^1.1.18"
   }
 }
