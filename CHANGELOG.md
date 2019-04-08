@@ -1,3 +1,7 @@
+### 1.1.3
+* Fix the re-run error after clicking stop
+* Update development dependencies
+
 ### 1.1.2
 * npm audit fix.
 

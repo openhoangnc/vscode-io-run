@@ -6,7 +6,9 @@ Support tool for running and testing your Competitive Programming solutions in m
 
 ## Donation
 
-If you like this extension, you could donate via **[PayPal](https://paypal.me/tohoangnc)**. Any amount is welcome. It will encourage me to make this extension better and better!
+If you like this extension, you could donate via **[PayPal](https://paypal.me/tohoangnc)** or AliPay or Momo. Any amount is welcome. It will encourage me to make this extension better and better!
+
+![Donate via AliPay](images/donate_alipay.jpg)　![Donate via Momo](images/donate_momo.png)
 
 ## Features
 

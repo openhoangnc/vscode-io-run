@@ -241,6 +241,8 @@ export class IORunManager {
 
             this.process = require('child_process').exec(runCmd, { cwd: executor.codeDir, env: processEnv }, (err, stdout, stderr) => {
                 let isOK = false;
+                this.process = null;
+
                 if (this.killRequested) {
                     this.output.appendLine('STOPPED');
                     this.killRequested = false;
@@ -253,7 +255,6 @@ export class IORunManager {
                     let endTime = new Date();
                     let elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000;
 
-                    this.process = null;
                     if (err == null) {
                         this.output.append('done ' + elapsedTime.toFixed(3) + 's');
 
@@ -326,8 +327,7 @@ export class IORunManager {
                                 this.output.appendLine(output.trim());
                             }
                         }
-                    }
-                    else {
+                    } else {
                         this.output.appendLine('RTE');
                         if (!this.traceError(executor, runCmd, processEnv)) {
                             this.output.appendLine(stderr);
