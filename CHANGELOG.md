@@ -1,4 +1,7 @@
 ### 1.1.4
+* use webpack for better performance
+
+### 1.1.4
 * update description
 
 ### 1.1.3

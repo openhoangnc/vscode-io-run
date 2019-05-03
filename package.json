@@ -2,7 +2,7 @@
   "name": "io-run",
   "displayName": "IORun",
   "description": "Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e  C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
@@ -33,7 +33,7 @@
     "onCommand:io-run.run-1-input",
     "onCommand:io-run.add-input-output"
   ],
-  "main": "./out/src/extension",
+  "main": "./dist/extension",
   "contributes": {
     "commands": [
       {
@@ -383,19 +383,23 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "package": "vsce package"
+    "package": "vsce package",
+    "vscode:prepublish": "webpack --mode production",
+    "compile": "webpack --mode none",
+    "watch": "webpack --mode none --watch",
+    "test-compile": "tsc -p ./"
   },
   "dependencies": {
     "node-machine-id": "^1.1.10",
     "tree-kill": "^1.2.1",
-    "universal-analytics": "0.4.20"
+    "universal-analytics": "^0.4.20"
   },
   "devDependencies": {
-    "@types/node": "^11.13.0",
-    "typescript": "^3.4.2",
-    "vscode": "^1.1.33"
+    "@types/node": "^11.13.9",
+    "ts-loader": "^5.4.5",
+    "typescript": "^3.4.5",
+    "vscode": "^1.1.33",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   }
 }
