@@ -387,12 +387,15 @@
     "vscode:prepublish": "webpack --mode production",
     "compile": "webpack --mode none",
     "watch": "webpack --mode none --watch",
-    "test-compile": "tsc -p ./"
+    "test-compile": "tsc -p ./",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "dependencies": {
     "node-machine-id": "^1.1.10",
     "tree-kill": "^1.2.1",
-    "universal-analytics": "^0.4.20"
+    "universal-analytics": "^0.4.20",
+    "snyk": "^1.258.2"
   },
   "devDependencies": {
     "@types/node": "^11.13.9",
@@ -401,5 +404,6 @@
     "vscode": "^1.1.33",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.1"
-  }
+  },
+  "snyk": true
 }
