@@ -1,5 +1,8 @@
-### 1.1.6
+### 1.1.7
 * fix: package.json & yarn.lock to reduce vulnerabilities
+
+### 1.1.6
+*update dependencies
 
 ### 1.1.5
 * use webpack for better performance
