@@ -15,15 +15,16 @@ export class IORunManager {
     private killRequested: boolean;
     private timeLimitExceeded: boolean;
     private executeTimer;
-
+    private analytics;
     private runningCodeFile: string;
 
-    constructor(config) {
+    constructor(config, analytics) {
         this.output = vscode.window.createOutputChannel('IO Run');
         this.terminal = vscode.window.createTerminal('IO Run');
         this.killRequested = false;
         this.timeLimitExceeded = false;
         this.config = config;
+        this.analytics = analytics;
     }
 
     public updateConfig(config): void {
@@ -31,7 +32,7 @@ export class IORunManager {
     }
 
     public stop(): void {
-        analytics.send("Action", "stop");
+        this.analytics.send("Action", "stop");
 
         if (this.process != null) {
             this.killRequested = true;
@@ -41,7 +42,7 @@ export class IORunManager {
     }
 
     public addInputOutput(): void {
-        analytics.send("Action", "addInputOutput");
+        this.analytics.send("Action", "addInputOutput");
 
         let codeFile = this.getCodeFile();
         if (codeFile == null) return;
@@ -74,7 +75,7 @@ export class IORunManager {
     }
 
     public run(runAllInputs: boolean = true): void {
-        analytics.send("Action", "run");
+        this.analytics.send("Action", "run");
 
         if (this.process != null) {
             vscode.window.showInformationMessage('[' + this.runningCodeFile + '] still running!');
@@ -90,7 +91,7 @@ export class IORunManager {
         let executor = this.getExecutor(codeFile);
         executor.runAllInput = runAllInputs;
 
-        analytics.send("CodeExt", executor.codeExt);
+        this.analytics.send("CodeExt", executor.codeExt);
 
         if (executor.clearPreviousOutput) {
             this.output.clear();

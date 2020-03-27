@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.31.tgz#d6b4f9645fee17f11319b508fb1001797425da51"
   integrity sha512-T+wnJno8uh27G9c+1T+a1/WYCHzLeDqtsGJkoEdSp2X8RTh3oOCZQcUnjAx90CS8cmmADX51O0FI/tu9s0yssg==
 
+"@types/universal-analytics@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@types/universal-analytics/-/universal-analytics-0.4.4.tgz#496a52b92b599a0112bec7c12414062de6ea8449"
+  integrity sha512-9g3F0SGxVr4UDd6y07bWtFnkpSSX1Ake7U7AGHgSFrwM6pF53/fV85bfxT2JLWS/3sjLCcyzoYzQlCxpkVo7wA==
+
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"

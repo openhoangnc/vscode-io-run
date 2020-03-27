@@ -1,25 +1,23 @@
-'use strict';
-import * as vscode from 'vscode';
+import { WorkspaceConfiguration } from 'vscode';
 
-var visitor = null;
-var enable = false;
+import * as ua from 'universal-analytics';
+import * as nmi from 'node-machine-id';
 
-(() => {
-    var ua = require('universal-analytics');
-    var nmi = require('node-machine-id');
-    const mid = nmi.machineIdSync(true);
-    const uaid = 'UA-106099545-2';
+export const Analytics = (config?: WorkspaceConfiguration) => {
+    const UA_ID = 'UA-106099545-2';
+    const cfgEnableAnalytic = 'enableAnalytic';
 
-    visitor = ua(uaid, mid, { https: true });
-})()
+    let enable = config ? config.get<boolean>(cfgEnableAnalytic) : false;
+    let visitor = ua(UA_ID, nmi.machineIdSync(true), { https: true });
 
-export function updateConfig(config: vscode.WorkspaceConfiguration) {
-    enable = config.get<boolean>('enableAnalytic');
-}
-
-export function send(label, value) {
-    if (enable) {
-        visitor.event(label, value).send();
+    return {
+        updateConfig(config: WorkspaceConfiguration) {
+            enable = config.get<boolean>(cfgEnableAnalytic);
+        },
+        send(label, value) {
+            if (enable) {
+                visitor.event(label, value).send();
+            }
+        }
     }
 }
-

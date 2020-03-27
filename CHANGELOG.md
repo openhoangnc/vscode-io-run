@@ -1,3 +1,6 @@
+### 1.1.8
+* refactor source code
+
 ### 1.1.7
 * fix: package.json & yarn.lock to reduce vulnerabilities
 

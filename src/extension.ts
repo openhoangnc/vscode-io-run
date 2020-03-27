@@ -1,36 +1,34 @@
-'use strict';
 import * as vscode from 'vscode';
 import { IORunManager } from './ioRunManager';
-import * as analytics from './analytics';
+import { Analytics } from './analytics';
+
+let config: vscode.WorkspaceConfiguration;
+let analytics = Analytics();
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('"io-run" is now active!');
-    let config = vscode.workspace.getConfiguration('io-run');
+
+    config = vscode.workspace.getConfiguration('io-run');
 
     analytics.updateConfig(config);
     analytics.send("Extension", "activate");
     analytics.send("Platform", process.platform);
 
-    let ioRunManager = new IORunManager(config);
+    const ioRunManager = new IORunManager(config, analytics);
 
-    vscode.workspace.onDidChangeConfiguration(() => {
-        config = vscode.workspace.getConfiguration('io-run');
-        ioRunManager.updateConfig(config);
-        analytics.updateConfig(config);
-    });
-
-    let run = vscode.commands.registerCommand('io-run.run', () => {
+    const run = vscode.commands.registerCommand('io-run.run', () => {
         ioRunManager.run();
     });
-    let run1input = vscode.commands.registerCommand('io-run.run-1-input', () => {
+
+    const run1input = vscode.commands.registerCommand('io-run.run-1-input', () => {
         ioRunManager.run(false);
     });
 
-    let stop = vscode.commands.registerCommand('io-run.stop', () => {
+    const stop = vscode.commands.registerCommand('io-run.stop', () => {
         ioRunManager.stop();
     });
 
-    let addInputOutput = vscode.commands.registerCommand('io-run.add-input-output', () => {
+    const addInputOutput = vscode.commands.registerCommand('io-run.add-input-output', () => {
         ioRunManager.addInputOutput();
     });
 
@@ -38,7 +36,14 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(run1input);
     context.subscriptions.push(stop);
     context.subscriptions.push(addInputOutput);
+
+    vscode.workspace.onDidChangeConfiguration(() => {
+        config = vscode.workspace.getConfiguration('io-run');
+        ioRunManager.updateConfig(config);
+        analytics.updateConfig(config);
+    });
 }
 
 export function deactivate() {
+    analytics.send("Extension", "deactivate");
 }
