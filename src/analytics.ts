@@ -1,8 +1,5 @@
 'use strict';
 import * as vscode from 'vscode';
-import * as path from 'path';
-import * as os from 'os';
-import * as fs from 'fs';
 
 var visitor = null;
 var enable = false;

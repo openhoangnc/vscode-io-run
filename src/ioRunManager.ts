@@ -11,7 +11,6 @@ export class IORunManager {
     private output: vscode.OutputChannel;
     private terminal: vscode.Terminal;
     private process;
-    private codeFile: string;
     private config: vscode.WorkspaceConfiguration;
     private killRequested: boolean;
     private timeLimitExceeded: boolean;
@@ -337,7 +336,7 @@ export class IORunManager {
                         return;
                     }
                 }
-                
+
                 // show stderr when fails
                 if (!isOK && executor.showErrorOutputOnFails && stderr.length > 0) {
                     this.output.appendLine('stderr:');
@@ -642,9 +641,5 @@ export class IORunManager {
             }
         }
         return null;
-    }
-
-    private getWorkspaceRoot(codeFileDir: string): string {
-        return vscode.workspace.rootPath ? vscode.workspace.rootPath : codeFileDir;
     }
 }

@@ -8,6 +8,26 @@
   "engines": {
     "vscode": "^1.43.0"
   },
+  "scripts": {
+    "package": "vsce package",
+    "vscode:prepublish": "webpack --mode production",
+    "compile": "webpack --mode none",
+    "watch": "webpack --mode none --watch",
+    "test-compile": "tsc -p ./"
+  },
+  "dependencies": {
+    "node-machine-id": "^1.1.12",
+    "tree-kill": "^1.2.2",
+    "universal-analytics": "^0.4.20"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.31",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "vscode": "^1.1.36",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
   "categories": [
     "Programming Languages",
     "Other"
@@ -381,25 +401,5 @@
         "path": "./syntaxes/io-run-output.json"
       }
     ]
-  },
-  "scripts": {
-    "package": "vsce package",
-    "vscode:prepublish": "webpack --mode production",
-    "compile": "webpack --mode none",
-    "watch": "webpack --mode none --watch",
-    "test-compile": "tsc -p ./"
-  },
-  "dependencies": {
-    "node-machine-id": "^1.1.12",
-    "tree-kill": "^1.2.2",
-    "universal-analytics": "^0.4.20"
-  },
-  "devDependencies": {
-    "@types/node": "^12.12.31",
-    "ts-loader": "^6.2.2",
-    "typescript": "^3.8.3",
-    "vscode": "^1.1.36",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
   }
 }

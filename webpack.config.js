@@ -27,7 +27,6 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
         exclude: /node_modules/,
         use: [
           {
