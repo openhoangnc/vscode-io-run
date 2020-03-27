@@ -11,3 +11,10 @@ install:
 
 script:
   - vsce package
+
+deploy:
+  provider: script
+  script: deploy.sh
+  on:
+    tags: true
+    condition: "$TRAVIS_TAG =~ ^v"
