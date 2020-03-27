@@ -1,3 +1,6 @@
+### 1.1.9
+* fix icon
+
 ### 1.1.8
 * new icon & refactor source code
 
