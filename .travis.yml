@@ -13,7 +13,7 @@ script:
 
 deploy:
   provider: script
-  script: vsce publish -p $VSCE_PERSONAL_ACCESS_TOKENa
+  script: vsce publish -p $VSCE_PERSONAL_ACCESS_TOKEN
   skip_cleanup: true
   # on:
     # tags: true
