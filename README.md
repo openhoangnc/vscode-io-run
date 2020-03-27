@@ -4,12 +4,6 @@
 
 Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e **C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift**
 
-## Donation
-
-If you like this extension, you could donate via **[PayPal](https://paypal.me/tohoangnc)** or AliPay or Momo. Any amount is welcome. It will encourage me to make this extension better and better!
-
-![Donate via AliPay](images/donate_alipay.png)　![Donate via Momo](images/donate_momo.png)
-
 ## Features
 
 * Run code file
