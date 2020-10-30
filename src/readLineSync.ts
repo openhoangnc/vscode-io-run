@@ -63,7 +63,7 @@ module.exports = function* readLineSync(path, encoding) {
         chunkSize = 64 * 1024, //64KB
         bufferSize = chunkSize,
         remainder,
-        curBuffer = new Buffer(0),
+        curBuffer = Buffer.alloc(0),
         readBuffer,
         numOfLoops;
 
@@ -83,7 +83,7 @@ module.exports = function* readLineSync(path, encoding) {
     fd = fs.openSync(path, 'r');
 
     for (var i = 0; i < numOfLoops; i++) {
-        readBuffer = new Buffer(bufferSize);
+        readBuffer = Buffer.alloc(bufferSize);
 
         fs.readSync(fd, readBuffer, 0, bufferSize, bufferSize * i);
 
@@ -96,7 +96,7 @@ module.exports = function* readLineSync(path, encoding) {
     }
 
     if (remainder > 0) {
-        readBuffer = new Buffer(remainder, encoding);
+        readBuffer = Buffer.alloc(remainder, encoding);
 
         fs.readSync(fd, readBuffer, 0, remainder, bufferSize * i);
 
