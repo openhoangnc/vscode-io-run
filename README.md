@@ -4,6 +4,11 @@
 
 Support tool for running and testing your Competitive Programming solutions in multiple programming languages i.e **C, C++, D, Dart, Go, Groovy, Haskell, Java, JavaScript, Kotlin, Lua, OCaml, Pascal, Perl, PHP, Python, R, Ruby, Rust, Scala, Swift**
 
+## Donation
+Eat to live, live to code
+
+<a href="https://www.buymeacoffee.com/hoangnc"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a rice bowl&emoji=🍚&slug=hoangnc&button_colour=40DCA5&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00"></a>
+
 ## Features
 
 * Run code file
