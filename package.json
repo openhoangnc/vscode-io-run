@@ -6,29 +6,28 @@
   "publisher": "hoangnc",
   "icon": "images/logo.png",
   "engines": {
-    "vscode": "^1.50.1"
+    "vscode": "^1.65.2"
   },
+  "main": "./dist/extension",
   "scripts": {
     "package": "vsce package",
-    "vscode:prepublish": "webpack --mode production",
-    "compile": "webpack --mode none",
-    "watch": "webpack --mode none --watch",
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "build": "npm run esbuild-base -- --sourcemap",
+    "watch": "npm run esbuild-base -- --sourcemap --watch",
     "test-compile": "tsc -p ./"
   },
   "dependencies": {
     "node-machine-id": "^1.1.12",
     "tree-kill": "^1.2.2",
-    "universal-analytics": "^0.4.23"
+    "universal-analytics": "^0.5.3"
   },
   "devDependencies": {
-    "@types/node": "^12.12.2",
-    "@types/universal-analytics": "0.4.2",
-    "mocha": "^8.2.0",
-    "ts-loader": "^8.0.4",
-    "typescript": "^3.4.3",
-    "vscode": "^1.1.37",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "@types/node": "^17.0.23",
+    "@types/universal-analytics": "^0.4.5",
+    "@types/vscode": "^1.66.0",
+    "esbuild": "^0.14.34",
+    "typescript": "^4.6.3"
   },
   "categories": [
     "Programming Languages",
@@ -55,7 +54,6 @@
     "onCommand:io-run.run-1-input",
     "onCommand:io-run.add-input-output"
   ],
-  "main": "./dist/extension",
   "contributes": {
     "commands": [
       {
