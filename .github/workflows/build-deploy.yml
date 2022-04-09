@@ -1,8 +1,9 @@
 name: build
 on:
-  - push
-  - pull_request
-
+  push:
+  release:
+    types:
+    - created
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,4 +26,14 @@ jobs:
 
       - run: pnpm run build
 
-      - run: pnpm run package
+  deploy:
+    if: github.event_name == 'release' && github.event.action == 'created'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./.github/workflows/build
+      
+      - run: pnpm run publish
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
