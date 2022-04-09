@@ -1,9 +1,8 @@
 name: build
 on:
   push:
-  release:
-    types:
-    - created
+  create:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,7 +26,7 @@ jobs:
       - run: pnpm run build
 
   deploy:
-    if: github.event_name == 'release' && github.event.action == 'created'
+    if: github.ref_type == 'tag' && contains(github.ref_name, 'v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -1,3 +1,9 @@
+### 1.1.12
+* update dependencies
+
+### 1.1.11
+* update dependencies
+
 ### 1.1.10
 * fix icon
 
@@ -11,7 +17,7 @@
 * fix: package.json & yarn.lock to reduce vulnerabilities
 
 ### 1.1.6
-*update dependencies
+* update dependencies
 
 ### 1.1.5
 * use webpack for better performance
